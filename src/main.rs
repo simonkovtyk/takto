@@ -1,40 +1,32 @@
-use gtk::{prelude::*, Image, Widget};
-use gtk::{glib, Application, ApplicationWindow};
-use gtk4_layer_shell::{Edge, LayerShell};
+use std::env;
 
+use gtk::gdk::{Display, Texture};
+use gtk::gdk_pixbuf::Pixbuf;
+use gtk::{prelude::*, style_context_add_provider_for_display, Box, Image, Widget};
+use gtk::{glib, Application, ApplicationWindow};
+
+pub mod taskbar;
+pub mod utils;
 const APP_ID: &str = "dev.simonkov.taskbar";
 
-fn main() -> glib::ExitCode {
-  let app = Application::builder().application_id(APP_ID).build();
-  app.connect_activate(build_ui);
-  app.run()
+fn main() -> () {
+  let home_env = env::var("HOME").expect("HOME env not found");
+  let css_path = format!("{}/.config/gtk-widgets/style.css", home_env);
+
+  gtk::init().expect("GTK could not initialize");
+
+  let css_provider = gtk::CssProvider::new();
+  css_provider.load_from_path(&css_path);
+
+  let display = Display::default().expect("No default display");
+  style_context_add_provider_for_display(&display, &css_provider, gtk::STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+  let mut app = Application::builder().application_id(APP_ID).build();
+
+  gtk::Window::set_interactive_debugging(true);
+
+  taskbar::window::connect(&mut app);
+
+  app.run();
 }
 
-fn build_ui(app: &Application) -> () {
-  let window = ApplicationWindow::builder()
-    .application(app)
-    .default_height(40)
-    .decorated(false)
-    .opacity(0.0)
-    .build();
-
-
-  window.init_layer_shell();
-
-  window.set_anchor(Edge::Left, true);
-  window.set_anchor(Edge::Top, true);
-  window.set_anchor(Edge::Right, true);
-  window.set_anchor(Edge::Bottom, false);
-  window.set_exclusive_zone(40);
-
-  window.present();
-}
-
-fn add_logo(window: &mut ApplicationWindow) -> () {
-  let image = Image::builder()
-    .file("");
-
-  window.child(
-    
-  );
-}
