@@ -1,6 +1,6 @@
 use chrono::{Local, Timelike};
 use gtk::glib::timeout_add_seconds_local;
-use gtk::{Align, Application, ApplicationWindow, Label};
+use gtk::{Align, Application, ApplicationWindow, Button, Label, Popover};
 use gtk4_layer_shell::{Edge, LayerShell};
 use std::env;
 use gtk::gdk::Texture;
@@ -46,6 +46,8 @@ fn init(app: &Application) {
   window.set_anchor(Edge::Top, true);
   window.set_anchor(Edge::Right, true);
   window.set_anchor(Edge::Bottom, false);
+  window.set_margin(Edge::Top, 8);
+  window.set_margin(Edge::Bottom, 8);
   window.set_exclusive_zone(40);
 
   init_arch_logo(&mut left_container);
@@ -84,6 +86,16 @@ fn init_arch_logo(box_container: &mut Box) -> () {
 
   box_container.append(
     &image,
+  );
+}
+
+
+fn init_boot_menu(box_container: &mut Box) -> () {
+  let button = Button::builder()
+    .build();
+
+  button.set_child(
+
   );
 }
 

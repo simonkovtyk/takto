@@ -5,7 +5,7 @@ use gtk::gdk_pixbuf::Pixbuf;
 use gtk::{prelude::*, style_context_add_provider_for_display, Box, Image, Widget};
 use gtk::{glib, Application, ApplicationWindow};
 
-pub mod taskbar;
+pub mod widgets;
 pub mod utils;
 const APP_ID: &str = "dev.simonkov.taskbar";
 
@@ -25,7 +25,7 @@ fn main() -> () {
 
   gtk::Window::set_interactive_debugging(true);
 
-  taskbar::window::connect(&mut app);
+  widgets::taskbar::window::connect(&mut app);
 
   app.run();
 }
