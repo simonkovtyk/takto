@@ -1,22 +1,25 @@
-use gtk::{Box, Image};
 use std::env;
+
+use gdk4::{gdk_pixbuf::{InterpType, Pixbuf}, Texture};
+use gtk4::{Box, Image, Orientation};
 
 pub fn get_horizontal_box_spacer() -> Box {
   return Box::builder()
-    .orientation(gtk::Orientation::Horizontal)
+    .orientation(Orientation::Horizontal)
     .hexpand(true)
     .build()
 }
 
+pub fn get_home_path () -> String {
+  return env::var("HOME").expect("HOME env not found");
+}
+
 pub fn image_from_path(path: &str, width: i32, height: i32) -> Image {
-  let home_env = env::var("HOME").expect("HOME env not found");
+  let pixbuf = Pixbuf::from_file(path)
+    .expect("Image not found");
 
-  println!("{}", home_env);
-
-  let pixbuf = Pixbuf::from_file(format!("{}/.config/gtk-widgets/arch.png", home_env)).expect("Image not found");
-
-  let scaled_pixbuf = pixbuf.scale_simple(40, 40, gtk::gdk_pixbuf::InterpType::Bilinear).expect("Could not scale pixbuf");
+  let scaled_pixbuf = pixbuf.scale_simple(width, height, InterpType::Bilinear).expect("Could not scale pixbuf");
   let image_texture = Texture::for_pixbuf(&scaled_pixbuf);
 
-  let image = Image::from_paintable(Some(&image_texture));
+  return Image::from_paintable(Some(&image_texture));
 }

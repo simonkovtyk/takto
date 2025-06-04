@@ -5,6 +5,9 @@ edition = "2024"
 
 [dependencies]
 chrono = "0.4.41"
-gtk = { version = "0.9.6", package = "gtk4", features = ["v4_18"] }
+gdk4 = { version = "0.9.6", features = ["v4_18"] }
+gtk4 = { version = "0.9.6", features = ["v4_18"] }
 gtk4-layer-shell = "0.5.0"
+serde_yaml = "0.9.34"
+serde = "1.0"
 zbus = { version = "5.7.1", default-features = false, features = ["tokio"] }

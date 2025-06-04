@@ -1,27 +1,25 @@
 use chrono::{Local, Timelike};
-use gtk::glib::timeout_add_seconds_local;
-use gtk::{Align, Application, ApplicationWindow, Button, Label, Popover};
+use gdk4::glib::ControlFlow;
+use gdk4::Monitor;
+use gtk4::glib::timeout_add_seconds_local;
+use gtk4::{Align, Application, ApplicationWindow, Button, Label, Orientation, Popover};
 use gtk4_layer_shell::{Edge, LayerShell};
-use std::env;
-use gtk::gdk::Texture;
-use gtk::gdk_pixbuf::Pixbuf;
-use gtk::{prelude::*, Box, Image};
+use gtk4::{prelude::*, Box };
 
-use crate::utils::gtk::get_horizontal_box_spacer;
+use crate::utils::gtk::{get_home_path, get_horizontal_box_spacer, image_from_path};
 
-pub fn connect(app: &mut Application) {
-  app.connect_activate(init);
-}
-
-fn init(app: &Application) {
+pub fn init(app: &Application, monitor: Monitor) {
   let window = ApplicationWindow::builder()
     .application(app)
     .default_height(40)
     .name("taskbar__window")
     .build();
 
+  window.init_layer_shell();
+  window.set_monitor(Some(&monitor));
+
   let box_container = Box::builder()
-    .orientation(gtk::Orientation::Horizontal)
+    .orientation(Orientation::Horizontal)
     .name("main__container")
     .spacing(0)
     .margin_start(12)
@@ -29,18 +27,17 @@ fn init(app: &Application) {
     .build();
 
   let mut left_container = Box::builder()
-    .orientation(gtk::Orientation::Horizontal)
+    .orientation(Orientation::Horizontal)
     .name("left__container")
     .spacing(0)
     .build();
 
   let mut right_container = Box::builder()
-    .orientation(gtk::Orientation::Horizontal)
+    .orientation(Orientation::Horizontal)
     .name("right__container")
-    .spacing(0)
+    .spacing(16)
     .build();
 
-  window.init_layer_shell();
 
   window.set_anchor(Edge::Left, true);
   window.set_anchor(Edge::Top, true);
@@ -51,6 +48,7 @@ fn init(app: &Application) {
   window.set_exclusive_zone(40);
 
   init_arch_logo(&mut left_container);
+  init_boot_menu(&mut right_container, &app);
   init_clock(&mut right_container);
 
   box_container.append(
@@ -71,16 +69,10 @@ fn init(app: &Application) {
 }
 
 fn init_arch_logo(box_container: &mut Box) -> () {
-  let home_env = env::var("HOME").expect("HOME env not found");
-
-  println!("{}", home_env);
-
-  let pixbuf = Pixbuf::from_file(format!("{}/.config/gtk-widgets/arch.png", home_env)).expect("Image not found");
-
-  let scaled_pixbuf = pixbuf.scale_simple(40, 40, gtk::gdk_pixbuf::InterpType::Bilinear).expect("Could not scale pixbuf");
-  let image_texture = Texture::for_pixbuf(&scaled_pixbuf);
-
-  let image = Image::from_paintable(Some(&image_texture));
+  let image = image_from_path(
+    &format!("{}/{}", get_home_path(), ".config/gtk-widgets/resources/arch.png"),
+    40, 40
+  );
 
   image.set_halign(Align::Start);
 
@@ -89,13 +81,26 @@ fn init_arch_logo(box_container: &mut Box) -> () {
   );
 }
 
-
-fn init_boot_menu(box_container: &mut Box) -> () {
+fn init_boot_menu(box_container: &mut Box, app: &Application) -> () {
   let button = Button::builder()
+    .name("boot__button")
     .build();
 
-  button.set_child(
+  button.connect_clicked(move |_| {
+    
+  });
 
+  let image = image_from_path(
+    &format!("{}/{}", get_home_path(), ".config/gtk-widgets/icons/power.png"),
+    24, 24
+  );
+
+  button.set_child(
+    Some(&image)
+  );
+
+  box_container.append(
+    &button
   );
 }
 
@@ -110,7 +115,7 @@ fn init_clock(box_container: &mut Box) -> () {
   timeout_add_seconds_local(60, move || {
     label_clone.set_label(&get_formatted_time());
 
-    gtk::glib::ControlFlow::Continue
+    ControlFlow::Continue
   });
 
   box_container.append(
