@@ -7,6 +7,7 @@ use gtk4_layer_shell::{Edge, LayerShell};
 use gtk4::{prelude::*, Box };
 
 use crate::utils::gtk::{get_home_path, get_horizontal_box_spacer, image_from_path};
+use crate::widgets::boot_overlay;
 
 pub fn init(app: &Application, monitor: Monitor) {
   let window = ApplicationWindow::builder()
@@ -87,7 +88,7 @@ fn init_boot_menu(box_container: &mut Box, app: &Application) -> () {
     .build();
 
   button.connect_clicked(move |_| {
-    
+    boot_overlay::window::init();
   });
 
   let image = image_from_path(
