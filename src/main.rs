@@ -9,27 +9,26 @@ use crate::utils::gtk::get_home_path;
 
 pub mod widgets;
 pub mod utils;
+pub mod components;
+pub mod sockets;
+pub mod dbus;
+
 const APP_ID: &str = "dev.simonkov.taskbar";
 
 fn main() -> () {
   gtk4::init().expect("GTK could not initialize");
 
+  let display = Display::default().expect("No default display");
   let css_provider = CssProvider::new();
   let css_path = format!("{}/.config/gtk-widgets/style.css", get_home_path());
   css_provider.load_from_path(&css_path);
-
-  let display = Display::default().expect("No default display");
-
   style_context_add_provider_for_display(&display, &css_provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   let app = Application::builder()
     .application_id(APP_ID)
     .build();
-
   let monitors = display.monitors();
-
   let config = parse_config();
-
   let mut visible_monitors = Vec::<Monitor>::new();
 
   for index in 0..monitors.n_items() {
