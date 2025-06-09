@@ -1,7 +1,5 @@
-use zbus::Connection;
-
 pub async fn send_shutdown () -> () {
-  let connection = Connection::system().await.expect("Could not connect to system dbus");
+  let connection = zbus::Connection::system().await.expect("Could not connect to system dbus");
 
   connection.call_method(
     Some("org.freedesktop.login1"),
@@ -13,7 +11,7 @@ pub async fn send_shutdown () -> () {
 }
 
 pub async fn send_reboot () -> () {
-  let connection = Connection::system().await.expect("Could not connect to system dbus");
+  let connection = zbus::Connection::system().await.expect("Could not connect to system dbus");
 
   connection.call_method(
     Some("org.freedesktop.login1"),

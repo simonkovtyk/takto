@@ -10,5 +10,10 @@ gtk4 = { version = "0.9.6", features = ["v4_18"] }
 gtk4-layer-shell = "0.5.0"
 serde_yaml = "0.9.34"
 serde = "1.0"
-tokio = "1.45.1"
+tokio = { version = "1.45.1", features = ["full"] }
 zbus = { version = "5.7.1" }
+async-channel = "2.3.1"
+librsvg = "2.60.0"
+cairo-rs = "0.20"
+graphene-rs = "0.20.10"
+gio = "0.20"

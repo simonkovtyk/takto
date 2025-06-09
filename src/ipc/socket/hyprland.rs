@@ -12,7 +12,7 @@ fn init_socket () -> UnixStream {
   return UnixStream::connect(&socket_path).expect("Could not connect to hyprland socket");
 }
 
-pub fn send_request (data: &str) -> () {
+pub fn send_data_to_socket (data: &str) -> () {
   let mut socket = init_socket();
 
   socket.write_all(data.as_bytes()).expect("Could not write data into hyprland socket");

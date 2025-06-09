@@ -1,22 +1,21 @@
-use gtk4::{prelude::{BoxExt, ButtonExt, WidgetExt}, Align, Box, Button, Label, Orientation};
+use gtk4::prelude::*;
+use crate::utils::gtk;
 
-use crate::utils::gtk::image_from_path;
+pub fn build_icon_button (label: &str, icon_path: &str, icon_width: i32, icon_height: i32) -> gtk4::Button {
+  let button = gtk4::Button::new();
 
-pub fn build_icon_button (label: &str, icon_path: &str, icon_width: i32, icon_height: i32) -> Button {
-  let button = Button::new();
-
-  let inner_box = Box::builder()
-    .orientation(Orientation::Horizontal)
+  let inner_box = gtk4::Box::builder()
+    .orientation(gtk4::Orientation::Horizontal)
     .spacing(6)
     .build();
 
-  let icon_image = image_from_path(icon_path, icon_width, icon_height);
+  let icon_image = gtk::image_from_path(icon_path, icon_width, icon_height);
 
   inner_box.append(
     &icon_image
   );
 
-  let label = Label::builder()
+  let label = gtk4::Label::builder()
     .label(label)
     .build();
 

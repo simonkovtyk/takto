@@ -1,39 +1,50 @@
-use gdk4::{Display, DisplayManager, Monitor, Texture};
-use gtk4::{prelude::*, style_context_add_provider_for_display, Box, CssProvider, Image, Widget, Window, STYLE_PROVIDER_PRIORITY_APPLICATION};
-use gtk4::Application;
-use gdk4::prelude::*;
+use std::future::pending;
 use gtk4::prelude::*;
-
 use crate::utils::config::parse_config;
-use crate::utils::gtk::get_home_path;
 
 pub mod widgets;
 pub mod utils;
 pub mod components;
-pub mod sockets;
-pub mod dbus;
+pub mod ipc;
 
-const APP_ID: &str = "dev.simonkov.taskbar";
+const APP_ID: &str = "barion.layer";
 
-fn main() -> () {
+#[tokio::main]
+async fn main() -> () {
+  let (notification_sender, _notification_reciever) = tokio::sync::broadcast::channel(1);
+
+  let notification_sender_clone = notification_sender.clone();
+
+  tokio::task::spawn(async move {
+    let _connt = zbus::connection::Builder::session().unwrap()
+      .name("org.freedesktop.Notifications").unwrap()
+      .serve_at("/org/freedesktop/Notifications", ipc::dbus::notifications::NotificationServer {
+        sender: notification_sender_clone
+      }).unwrap()
+      .build()
+      .await.unwrap();
+
+    pending::<()>().await;
+  });
+
   gtk4::init().expect("GTK could not initialize");
 
-  let display = Display::default().expect("No default display");
-  let css_provider = CssProvider::new();
-  let css_path = format!("{}/.config/gtk-widgets/style.css", get_home_path());
+  let display = gdk4::Display::default().expect("No default display");
+  let css_provider = gtk4::CssProvider::new();
+  let css_path = format!("{}/.config/gtk-widgets/style.css", utils::env::get_home_env());
   css_provider.load_from_path(&css_path);
-  style_context_add_provider_for_display(&display, &css_provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk4::style_context_add_provider_for_display(&display, &css_provider, gtk4::STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-  let app = Application::builder()
+  let app = gtk4::Application::builder()
     .application_id(APP_ID)
     .build();
   let monitors = display.monitors();
   let config = parse_config();
-  let mut visible_monitors = Vec::<Monitor>::new();
+  let mut visible_monitors = Vec::<gdk4::Monitor>::new();
 
   for index in 0..monitors.n_items() {
     let current_monitor = monitors.item(index);
-    let downcasted_monitor = current_monitor.unwrap().downcast::<Monitor>().unwrap();
+    let downcasted_monitor = current_monitor.unwrap().downcast::<gdk4::Monitor>().unwrap();
     let monitor_connector = downcasted_monitor.connector();
 
     if config.all_monitors.is_some_and(|x| x) {
@@ -42,18 +53,25 @@ fn main() -> () {
       continue;
     }
 
-    if monitor_connector.is_none() || config.monitors.as_ref().is_some() && config.monitors.as_ref().unwrap().contains(&monitor_connector.unwrap().to_string()) {
+    if monitor_connector.is_none() || config.monitors.as_ref().is_some() && !config.monitors.as_ref().unwrap().contains(&monitor_connector.unwrap().to_string()) {
       continue;
     }
 
     visible_monitors.push(downcasted_monitor);
   }
 
-  Window::set_interactive_debugging(true);
+  gtk4::Window::set_interactive_debugging(true);
 
   app.connect_activate(move |application| {
+
     for monitor in visible_monitors.clone() {
-      widgets::taskbar::window::init(application, monitor);
+      let notification_reciever_clone = notification_sender.subscribe();
+
+      widgets::taskbar::window::init(
+        application,
+        monitor,
+        notification_reciever_clone
+      );
     }
   });
 
