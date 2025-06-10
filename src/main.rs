@@ -63,13 +63,16 @@ async fn main() -> () {
   gtk4::Window::set_interactive_debugging(true);
 
   app.connect_activate(move |application| {
-
     for monitor in visible_monitors.clone() {
+      let notification_reciever_clone = notification_sender.subscribe();
+
+      widgets::notification_popup::window::init(application, monitor.clone(), notification_reciever_clone);
+
       let notification_reciever_clone = notification_sender.subscribe();
 
       widgets::taskbar::window::init(
         application,
-        monitor,
+        monitor.clone(),
         notification_reciever_clone
       );
     }
