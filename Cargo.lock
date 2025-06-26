@@ -950,25 +950,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "gtk-widgets"
-version = "0.1.0"
-dependencies = [
- "async-channel",
- "cairo-rs",
- "chrono",
- "gdk4",
- "gio",
- "graphene-rs",
- "gtk4",
- "gtk4-layer-shell",
- "librsvg",
- "serde",
- "serde_yaml",
- "tokio",
- "zbus",
-]
-
-[[package]]
 name = "gtk4"
 version = "0.9.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2282,6 +2263,25 @@ dependencies = [
  "pkg-config",
  "toml",
  "version-compare",
+]
+
+[[package]]
+name = "takto-rs"
+version = "1.0.0"
+dependencies = [
+ "async-channel",
+ "cairo-rs",
+ "chrono",
+ "gdk4",
+ "gio",
+ "graphene-rs",
+ "gtk4",
+ "gtk4-layer-shell",
+ "librsvg",
+ "serde",
+ "serde_yaml",
+ "tokio",
+ "zbus",
 ]
 
 [[package]]

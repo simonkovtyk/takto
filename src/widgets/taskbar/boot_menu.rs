@@ -144,10 +144,7 @@ pub fn create_boot_menu(parent_button: &gtk4::Button) -> () {
     */
   });
 
-  let image = utils::gtk::image_from_path(
-    &format!("{}/{}", utils::env::get_home_env(), ".config/gtk-widgets/icons/power.png"),
-    24, 24
-  );
+  let image = utils::gtk::image_from_binary_data(include_bytes!("../../../assets/power.png"));
 
   parent_button.set_child(
     Some(&image)

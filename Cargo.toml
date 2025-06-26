@@ -1,7 +1,19 @@
 [package]
-name = "gtk-widgets"
-version = "0.1.0"
+name = "takto-rs"
+version = "1.0.0"
 edition = "2024"
+
+[[bin]]
+name = "takto-rs"
+path = "src/main.rs"
+
+[profile.release]
+opt-level = 3
+debug = false
+strip = "debuginfo"
+lto = "fat"
+codegen-units = 1
+panic = "abort"
 
 [dependencies]
 chrono = "0.4.41"

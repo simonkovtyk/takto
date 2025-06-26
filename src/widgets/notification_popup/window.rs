@@ -1,7 +1,9 @@
+use std::time::Duration;
+
 use gtk4_layer_shell::LayerShell;
 use gtk4::prelude::*;
 use gtk4::glib;
-use crate::{ipc, utils, widgets};
+use crate::{ipc, widgets};
 
 pub fn init (
   app: &gtk4::Application,
@@ -14,6 +16,10 @@ pub fn init (
     .build();
 
   window.init_layer_shell();
+  window.set_default_height(0);
+  window.set_default_width(0);
+  window.set_hexpand(false);
+  window.set_vexpand(true);
   window.set_monitor(Some(&monitor));
   window.set_anchor(gtk4_layer_shell::Edge::Right, true);
   window.set_anchor(gtk4_layer_shell::Edge::Bottom, true);
@@ -32,6 +38,7 @@ pub fn init (
     while let Ok(notification) = notification_reciever.recv().await {
       let notification_item = widgets::common::notification::create_notification_item(notification);
 
+      println!("recieved");
       notification_container_clone.append(
         &notification_item
       );
@@ -39,6 +46,11 @@ pub fn init (
       let notification_container_clone = notification_container_clone.clone();
 
       glib::spawn_future_local(async move {
+        println!("spawned");
+        glib::timeout_future(Duration
+          ::from_secs(5000)).await;
+
+        println!("removing...");
         notification_container_clone.remove(
           &notification_item
         );
@@ -53,23 +65,3 @@ pub fn init (
   window.present();
 }
 
-pub fn create_notification_item (notification: ipc::dbus::notifications::Notification) -> gtk4::Box {
-  let item_box = gtk4::Box::builder()
-    .build();
-
-  if let Some(notification_image) = notification.image {
-    match notification_image {
-      ipc::dbus::notifications::NotificationImage::Binary(image) => {
-        let image = utils::gtk::image_from_dbus_value(image, 48, 48);
-
-        image.set_pixel_size(48);
-
-        item_box.append(
-          &image
-        );
-      }
-    }
-  }
-
-  return item_box;
-}

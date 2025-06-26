@@ -1,3 +1,4 @@
+use gio::glib;
 use gtk4::gdk_pixbuf;
 
 pub fn get_horizontal_box_spacer() -> gtk4::Box {
@@ -17,13 +18,13 @@ pub fn image_from_path(path: &str, width: i32, height: i32) -> gtk4::Image {
   return gtk4::Image::from_paintable(Some(&image_texture));
 }
 
-pub fn image_from_binary_data(data: Vec<u8>, width: i32, height: i32) -> gtk4::Image {
-  let pixbuf = gdk_pixbuf::Pixbuf::from_mut_slice(data, gdk_pixbuf::Colorspace::Rgb, false, 8, width, height, width * 3);
-
-  let scaled_pixbuf = pixbuf.scale_simple(width, height, gdk_pixbuf::InterpType::Bilinear).expect("Could not scale pixbuf");
-
+pub fn image_from_binary_data(data: &[u8]) -> gtk4::Image {
   return gtk4::Image::from_paintable(
-    Some(&gdk4::Texture::for_pixbuf(&scaled_pixbuf))
+    Some(
+      &gdk4::Texture::from_bytes(
+        &glib::Bytes::from(&data)
+      ).expect("Could not create texture from bytes")
+    )
   );
 }
 

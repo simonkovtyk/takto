@@ -1,0 +1,58 @@
+#taskbar__window {
+  background-color: unset;
+}
+
+.taskbar-side-item__box {
+  padding: 0 16px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 12px;
+}
+
+.taskbar-side-item__button {
+  padding: 0 16px;
+  background-image: none;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  transition: 200ms;
+}
+
+.taskbar-side-item__button--active {
+  border-color: #7300ff;
+}
+
+#taskbar-clock__label {
+  font-size: 16px;
+  color: white;
+}
+
+#taskbar-boot__popover contents {
+  border: none;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 12px;
+  padding: 8px;
+}
+
+#taskbar-boot__popover arrow {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.taskbar-boot-popover__button {
+  background-color: unset;
+  background-image: none;
+  border: none;
+  font-size: 16px;
+  padding: 4px 16px;
+  color: white;
+}
+
+.taskbar-boot-popover__button:hover {
+  background-color: #7300ff;
+}
+
+#notifcation-popup__window {
+  background-image: none;
+  background-color: transparent;
+}
+
+/*# sourceMappingURL=styles.css.map */

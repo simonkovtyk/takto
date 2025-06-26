@@ -1,4 +1,3 @@
-use std::future::pending;
 use gtk4::prelude::*;
 use crate::utils::config::parse_config;
 
@@ -7,12 +6,13 @@ pub mod utils;
 pub mod components;
 pub mod ipc;
 
-const APP_ID: &str = "barion.layer";
+const APP_ID: &str = "takto.rs.layer";
+const CSS: &str = include_str!("../assets/styles.css");
 
 #[tokio::main]
 async fn main() -> () {
+  /*
   let (notification_sender, _notification_reciever) = tokio::sync::broadcast::channel(1);
-
   let notification_sender_clone = notification_sender.clone();
 
   tokio::task::spawn(async move {
@@ -26,13 +26,14 @@ async fn main() -> () {
 
     pending::<()>().await;
   });
+  */
 
   gtk4::init().expect("GTK could not initialize");
 
   let display = gdk4::Display::default().expect("No default display");
   let css_provider = gtk4::CssProvider::new();
-  let css_path = format!("{}/.config/gtk-widgets/style.css", utils::env::get_home_env());
-  css_provider.load_from_path(&css_path);
+
+  css_provider.load_from_string(CSS);
   gtk4::style_context_add_provider_for_display(&display, &css_provider, gtk4::STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   let app = gtk4::Application::builder()
@@ -59,21 +60,30 @@ async fn main() -> () {
 
     visible_monitors.push(downcasted_monitor);
   }
-
-  gtk4::Window::set_interactive_debugging(true);
+  
+  //gtk4::Window::set_interactive_debugging(true);
 
   app.connect_activate(move |application| {
     for monitor in visible_monitors.clone() {
+      /*
       let notification_reciever_clone = notification_sender.subscribe();
 
       widgets::notification_popup::window::init(application, monitor.clone(), notification_reciever_clone);
 
       let notification_reciever_clone = notification_sender.subscribe();
 
-      widgets::taskbar::window::init(
+      widgets::notification_popup::window::init(
         application,
         monitor.clone(),
         notification_reciever_clone
+      );
+
+      let notification_reciever_clone = notification_sender.subscribe();
+      */
+
+      widgets::taskbar::window::init(
+        application,
+        monitor.clone()
       );
     }
   });

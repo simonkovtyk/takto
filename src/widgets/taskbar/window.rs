@@ -1,15 +1,13 @@
 use gtk4_layer_shell::LayerShell;
 use gtk4::prelude::*;
-use crate::widgets::taskbar::notification::create_notification_menu;
-use crate::{ipc, utils};
+use crate::utils;
 use crate::widgets::taskbar::boot_menu::create_boot_menu;
 use crate::widgets::taskbar::clock::create_clock_label;
 use crate::widgets::taskbar::os_logo::create_os_image;
 
 pub fn init(
   app: &gtk4::Application,
-  monitor: gdk4::Monitor,
-  notification_reciever: tokio::sync::broadcast::Receiver<ipc::dbus::notifications::Notification>
+  monitor: gdk4::Monitor
 ) {
   let window = gtk4::ApplicationWindow::builder()
     .application(app)
@@ -43,7 +41,7 @@ pub fn init(
     &utils::gtk::get_horizontal_box_spacer()
   );
   box_container.append(
-    &create_right_side_box(notification_reciever)
+    &create_right_side_box()
   );
 
   window.set_child(
@@ -67,7 +65,7 @@ fn create_left_side_box () -> gtk4::Box {
   return main_box;
 }
 
-fn create_right_side_box (notification_reciever: tokio::sync::broadcast::Receiver<ipc::dbus::notifications::Notification>) -> gtk4::Box {
+fn create_right_side_box () -> gtk4::Box {
   let main_box = create_side_box();
   let clock_container = create_side_item_box();
 
@@ -79,6 +77,7 @@ fn create_right_side_box (notification_reciever: tokio::sync::broadcast::Receive
 
   let _ = &create_boot_menu(&boot_button);
 
+  /*
   let notifications_button = create_side_item_button();
 
   let _ = &create_notification_menu(&notifications_button, notification_reciever);
@@ -86,6 +85,7 @@ fn create_right_side_box (notification_reciever: tokio::sync::broadcast::Receive
   main_box.append(
     &notifications_button
   );
+  */
 
   main_box.append(
     &clock_container

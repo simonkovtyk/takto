@@ -20,7 +20,7 @@ pub fn create_notification_item (notification: ipc::dbus::notifications::Notific
       ipc::dbus::notifications::NotificationImage::Binary(image) => {
         let image = utils::gtk::image_from_dbus_value(image, 48, 48);
 
-        image.set_pixel_size(48);
+        image.set_pixel_size(40);
 
         notification_item_box.append(
           &image
