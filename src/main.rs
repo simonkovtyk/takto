@@ -28,6 +28,8 @@ async fn main() -> () {
   });
   */
 
+  ipc::dbus::tray::listen();
+
   gtk4::init().expect("GTK could not initialize");
 
   let display = gdk4::Display::default().expect("No default display");
@@ -61,7 +63,7 @@ async fn main() -> () {
     visible_monitors.push(downcasted_monitor);
   }
   
-  //gtk4::Window::set_interactive_debugging(true);
+  gtk4::Window::set_interactive_debugging(true);
 
   app.connect_activate(move |application| {
     for monitor in visible_monitors.clone() {
