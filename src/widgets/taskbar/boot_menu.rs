@@ -1,6 +1,6 @@
 use gtk4::{prelude::*, glib};
 
-use crate::{ipc, utils};
+use crate::{ipc::{self, socket::hyprland::socket::send_to_hyprland_request_socket}, utils};
 
 pub fn create_boot_menu(parent_button: &gtk4::Button) -> () {
   let popover = gtk4::Popover::builder()
@@ -21,7 +21,7 @@ pub fn create_boot_menu(parent_button: &gtk4::Button) -> () {
     .build();
 
   exit_button.connect_clicked(move |_| {
-    ipc::socket::hyprland::send_data_to_socket("dispatch exit");
+    send_to_hyprland_request_socket("dispatch exit");
   });
 
   let exit_label = gtk4::Label::builder()

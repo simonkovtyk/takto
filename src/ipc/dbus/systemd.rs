@@ -19,5 +19,5 @@ pub async fn send_reboot () -> () {
     Some("org.freedesktop.login1.Manager"),
     "Reboot",
     &false
-  ).await.expect("Could not call power off method");
+  ).await.expect("Could not call reboot method");
 }

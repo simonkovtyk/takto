@@ -1,17 +1,18 @@
 use gtk4_layer_shell::LayerShell;
 use gtk4::prelude::*;
-use crate::utils;
+use crate::utils::gtk::get_horizontal_box_spacer;
 use crate::widgets::taskbar::boot_menu::create_boot_menu;
 use crate::widgets::taskbar::clock::create_clock_label;
 use crate::widgets::taskbar::os_logo::create_os_image;
+use crate::widgets::taskbar::virtual_desk::create_virtual_desk;
 
 pub fn init(
   app: &gtk4::Application,
   monitor: gdk4::Monitor
-) {
+  ) {
   let window = gtk4::ApplicationWindow::builder()
     .application(app)
-    .default_height(40)
+    .default_height(24)
     .name("taskbar__window")
     .build();
 
@@ -32,13 +33,19 @@ pub fn init(
   window.set_anchor(gtk4_layer_shell::Edge::Bottom, false);
   window.set_margin(gtk4_layer_shell::Edge::Top, 8);
   window.set_margin(gtk4_layer_shell::Edge::Bottom, 8);
-  window.set_exclusive_zone(40);
+  window.set_exclusive_zone(32);
 
   box_container.append(
     &create_left_side_box()
   );
   box_container.append(
-    &utils::gtk::get_horizontal_box_spacer()
+    &get_horizontal_box_spacer()
+  );
+  box_container.append(
+    &create_virtual_desk()
+  );
+  box_container.append(
+    &get_horizontal_box_spacer()
   );
   box_container.append(
     &create_right_side_box()

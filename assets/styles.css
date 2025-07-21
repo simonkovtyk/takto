@@ -2,19 +2,39 @@
   background-color: unset;
 }
 
+#taskbar-vdesk {
+  background-color: rgba(24, 24, 27, 0.8);
+  border-radius: 12px;
+}
+
+.taskbar-virtual-desk-item__button {
+  background-color: unset;
+  background-image: none;
+  border: 2px solid transparent;
+  border-radius: 12px;
+}
+
+.taskbar-virtual-desk-item__button--active {
+  background-color: #7300ff;
+}
+
 .taskbar-side-item__box {
   padding: 0 16px;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(24, 24, 27, 0.8);
   border-radius: 12px;
 }
 
 .taskbar-side-item__button {
   padding: 0 16px;
   background-image: none;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(24, 24, 27, 0.8);
   border: 2px solid transparent;
   border-radius: 12px;
   transition: 200ms;
+}
+
+.taskbar-side-item__button label {
+  font-size: 12px;
 }
 
 .taskbar-side-item__button--active {
@@ -28,13 +48,13 @@
 
 #taskbar-boot__popover contents {
   border: none;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(24, 24, 27, 0.8);
   border-radius: 12px;
   padding: 8px;
 }
 
 #taskbar-boot__popover arrow {
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(24, 24, 27, 0.8);
 }
 
 .taskbar-boot-popover__button {

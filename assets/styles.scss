@@ -7,25 +7,45 @@ $zinc-700: #3f3f46;
 $zinc-800: #27272a;
 $zinc-900: #18181b;
 $black: #000000;
-$black-transparent: rgba($black, 0.7);
+$background: rgba($zinc-900, 0.8);
 
 #taskbar__window {
   background-color: unset;
 }
 
+#taskbar-vdesk {
+  background-color: $background;
+  border-radius: 12px;
+}
+
+.taskbar-virtual-desk-item__button {
+  background-color: unset;
+  background-image: none;
+  border: 2px solid transparent;
+  border-radius: 12px;
+}
+
+.taskbar-virtual-desk-item__button--active {
+  background-color: $purple;
+}
+
 .taskbar-side-item__box {
   padding: 0 16px;
-  background-color: $black-transparent;
+  background-color: $background;
   border-radius: 12px;
 }
 
 .taskbar-side-item__button {
   padding: 0 16px;
   background-image: none;
-  background-color: $black-transparent;
+  background-color: $background;
   border: 2px solid transparent;
   border-radius: 12px;
   transition: 200ms;
+}
+
+.taskbar-side-item__button label {
+  font-size: 12px;
 }
 
 .taskbar-side-item__button--active {
@@ -39,13 +59,13 @@ $black-transparent: rgba($black, 0.7);
 
 #taskbar-boot__popover contents {
   border: none;
-  background-color: $black-transparent;
+  background-color: $background;
   border-radius: 12px;
   padding: 8px;
 }
 
 #taskbar-boot__popover arrow {
-  background-color: $black-transparent;
+  background-color: $background;
 }
 
 .taskbar-boot-popover__button {
