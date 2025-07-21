@@ -17,29 +17,29 @@ fn main () -> Result<(), anyhow::Error> {
       continue;
     }
 
-    let in_file = in_file_buf.to_str().unwrap();
+    let relative_in_file_path_segments = in_file_buf.iter().skip(1).collect::<PathBuf>();
 
-    let mut out_file_buf = in_file_buf.clone();
-    out_file_buf.set_extension("css");
+    let out_segment_path = relative_in_file_path_segments.as_path().to_str().unwrap();
+    let mut out_path_buf = out_dir_buf.join(out_segment_path);
 
-    let out_file = format!("{}/{}",
-      out_dir_buf.to_str().unwrap(),
-      out_file_buf.file_name().unwrap().to_str().unwrap()
-    );
+    out_path_buf.set_extension("css");
+
+    let out_path = out_path_buf.to_str().unwrap();
+    let in_path = in_file_buf.to_str().unwrap();
 
     let status = Command::new("sass")
       .arg("--style=compressed")
       .arg("--no-source-map")
-      .arg(&in_file)
-      .arg(&out_file)
+      .arg(&in_path)
+      .arg(&out_path)
       .status()
       .expect("Failed to execute sass command");
 
     if !status.success() {
-      panic!("sass failed on {}", out_file);
+      panic!("sass failed on {}", out_path);
     }
 
-    println!("cargo:rerun-if-changed={}", in_file);
+    println!("cargo:rerun-if-changed={}", in_path);
   }
 
   return Ok(());

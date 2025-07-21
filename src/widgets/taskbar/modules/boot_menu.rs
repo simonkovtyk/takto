@@ -144,7 +144,7 @@ pub fn create_boot_menu(parent_button: &gtk4::Button) -> () {
     */
   });
 
-  let image = utils::gtk::image_from_binary_data(include_bytes!("../../../assets/power.png"));
+  let image = utils::gtk::image_from_binary_data(include_bytes!("../../../../assets/power.png"));
 
   parent_button.set_child(
     Some(&image)

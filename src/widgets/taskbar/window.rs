@@ -1,10 +1,6 @@
 use gtk4_layer_shell::LayerShell;
 use gtk4::prelude::*;
-use crate::utils::gtk::get_horizontal_box_spacer;
-use crate::widgets::taskbar::boot_menu::create_boot_menu;
-use crate::widgets::taskbar::clock::create_clock_label;
-use crate::widgets::taskbar::os_logo::create_os_image;
-use crate::widgets::taskbar::virtual_desk::create_virtual_desk;
+use crate::{utils::gtk::get_horizontal_box_spacer, widgets::taskbar::modules::{boot_menu::create_boot_menu, clock::create_clock_label, os_logo::create_os_image, virtual_desk::create_virtual_desk}};
 
 pub fn init(
   app: &gtk4::Application,

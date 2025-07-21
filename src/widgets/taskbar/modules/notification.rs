@@ -3,8 +3,8 @@ use gio::glib;
 use crate::{ipc, utils};
 
 pub fn create_notification_menu (parent_button: &gtk4::Button, mut notification_reciever: tokio::sync::broadcast::Receiver<ipc::dbus::notifications::Notification>) {
-  let image = utils::gtk::image_from_binary_data(include_bytes!("../../../assets/bell.png"));
-  let badge_image = utils::gtk::image_from_binary_data(include_bytes!("../../../assets/badge.png"));
+  let image = utils::gtk::image_from_binary_data(include_bytes!("../../../../assets/bell.png"));
+  let badge_image = utils::gtk::image_from_binary_data(include_bytes!("../../../../assets/badge.png"));
 
   badge_image.set_pixel_size(12);
   badge_image.set_margin_top(8);
