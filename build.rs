@@ -39,7 +39,7 @@ fn main () -> Result<(), anyhow::Error> {
       panic!("sass failed on {}", out_file);
     }
 
-    println!("cargo:rerun-if-changed={}", out_file);
+    println!("cargo:rerun-if-changed={}", in_file);
   }
 
   return Ok(());
