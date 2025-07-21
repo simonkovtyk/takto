@@ -3,7 +3,7 @@ use gtk4::prelude::*;
 use crate::{utils::config::parse_config, widgets::taskbar};
 
 const APP_ID: &str = "takto.rs";
-const CSS: &str = include_str!("../../assets/styles.css");
+const CSS: &str = include_str!("../../target_css/styles.css");
 
 pub fn init_app () -> () {
   gtk4::init().expect("GTK could not initialize");
